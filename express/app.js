@@ -94,22 +94,54 @@ app.get('/users', (req, res) => {
     })
 })
 
+
 // ref
 app.get('/questions', (req, res) => {
-    Question.find({}, (err, questions) => {
+    QuestionComment.find({}, (err, questions) => {
         if (err) {
             console.log(err)
         }
         res.send(questions)
-    }).populate("users");
+    })
 
+})
+
+// Upvote Spørgsmål
+app.put("/upvoteQuestion", (req, res, next) => {
+    QuestionComment.findOneAndUpdate({"_id": mongoose.Types.ObjectId("5cbf023bc04f2f8fecb9ddc2")}, {$inc: {"votes": 1}},
+    (err, question) => {
+        if(err) {
+            console.log(err)
+            console.log("fejl")
+        }
+        
+        //{comment.votes = comment.votes + req.body.value}
+        console.log(req.body.value)
+        
+        res.send(question)        
+    }  )
+})
+
+// Downvote Spørgsmål
+app.put("/downvoteQuestion", (req, res, next) => {
+    QuestionComment.findOneAndUpdate({"_id": mongoose.Types.ObjectId("5cbf023bc04f2f8fecb9ddc2")}, {$inc: {"votes": -1}},
+    (err, question) => {
+        if(err) {
+            console.log(err)
+            console.log("fejl")
+        }
+        //{comment.votes = comment.votes + req.body.value}
+        console.log(req.body.value)
+        
+        res.send(question)        
+    }  )
 })
 
 // Embeded
 app.post("/newcomment", (req, res, next) => {
     const nyComment = {"title": req.body.comments.title, "votes": req.body.comments.votes, "user": req.body.comments.user}
     
-    QuestionComment.findOneAndUpdate({_id: "5cbf023bc04f2f8fecb9ddc2"}, 
+    QuestionComment.findOneAndUpdate({_id: "5cc06b5c6d05ce17c803ac6f"}, 
     {$push: {}}, (err, comment) => {
         if (err) {
         console.log(err) }
@@ -118,13 +150,22 @@ app.post("/newcomment", (req, res, next) => {
         res.send(comment)
     })       
 })
-
-app.post("/deleteComment", (req, res, next) => {
-    QuestionComment.findByIdAndDelete({_id: { $in: comments} 
+ // Get specifik comment ud fra dets id
+app.get("/upvoteComment", (req, res) => {
+    
+    QuestionComment.findOne({comments: {_id:  mongoose.Types.ObjectId("5cbf1052a014c9543c74607c")}},
+    (err, comment) => {
+        if(err) {
+            console.log(err)
+            console.log("fejl")
+        }            
+        res.send(comment)
+    })
 })
 
+
 //ref
-app.get('/comments', (req, res) => {
+/*app.get('/comments', (req, res) => {
     Comment.find({}, (err, comments) => {
         if (err) {
             console.log(err)
@@ -132,7 +173,7 @@ app.get('/comments', (req, res) => {
         res.send(comments)
     }).populate("user").populate("question")
 
-})
+}) */
 
 //Embeded
 app.post("/newQuestionComment", (req, res, next) => {
@@ -193,4 +234,4 @@ app.post('/newQuestion', (req, res, next) => {
 })
 
 
-app.listen(port, () => console.log(`Cooking API running on port ${port}!`));
+app.listen(port, () => console.log(`Forum API running on port ${port}!`));
