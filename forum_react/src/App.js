@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
+import QuestionList from './components/QuestionList';
 
 class App extends Component {
 
@@ -27,17 +28,25 @@ class App extends Component {
 
 
   render() {
-    let list = []
-    this.state.questions.forEach((elm) => {
-      list.push(<li>
-         <h3> {elm.title}</h3> votes:<h4>{elm.votes}</h4>
-      </li>)
-  });
+   
     return (
-      <div>
-      <h1> Forum </h1>      
-        {list}
-      </div> 
+      <Router>
+        <div className ="container">
+          <h1>The future forum</h1>
+
+          <Switch>
+              <Route exact path={"/"}
+                render={(props) => 
+                <React.Fragment>
+                  <QuestionList {...props}
+                  questions={this.state.questions} 
+                  header= {"All Questions"} />
+                </React.Fragment>}  
+                />
+          </Switch>
+          </div>
+      </Router>     
+      
     );
   }
 }

@@ -45,43 +45,23 @@ var User = mongoose.model("User", {
     password: String
 })
 
-var Comment = mongoose.model("Comment", {
-    title: String,
-    commentVotes: Number,
-    question: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Question"
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }
-})
-
-var Question = mongoose.model("Question", {
-    title: String,
-    votes: Number,
-    comments: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }
-})
 var Schema = mongoose.Schema;
 
-var Kommentar = new Schema({
+var Comment = new Schema({
     title: String,
     votes: Number,
-    user: String
+    user: String,
 })
 
-var QuestionComment2 = new Schema({
+var Question = new Schema({
     title: String,
     votes: Number,
-    comments: [Kommentar],
-    user: String
+    comments: [Comment],
+    user: String,
+    tags: Array
 })
 
-var QuestionComment = mongoose.model('QQuestion', QuestionComment2)
+var Questions = mongoose.model('Question', Question)
 
 
 // https://medium.com/@faizanv/authentication-for-your-react-and-express-application-w-json-web-tokens-923515826e0
@@ -94,72 +74,152 @@ app.get('/users', (req, res) => {
     })
 })
 
+//Embeded
+app.post("/newQuestion", (req, res, next) => {
+    var newQuestion = new Questions(req.body, req.body.votes = 0)
+    newQuestion.save(function (err, newQuestion) {
+        if (err) {
+            return next(err)
+        }
+        res.json(201, newQuestion);
+        console.log("New Question has been added" + newQuestion);
+    })
+})
 
 // ref
 app.get('/questions', (req, res) => {
-    QuestionComment.find({}, (err, questions) => {
+    Questions.find({}, (err, questions) => {
         if (err) {
             console.log(err)
         }
         res.send(questions)
     })
-
 })
-
+// {$inc: {"votes": 1}},
 // Upvote Spørgsmål
 app.put("/upvoteQuestion", (req, res, next) => {
-    QuestionComment.findOneAndUpdate({"_id": mongoose.Types.ObjectId("5cbf023bc04f2f8fecb9ddc2")}, {$inc: {"votes": 1}},
-    (err, question) => {
-        if(err) {
-            console.log(err)
-            console.log("fejl")
-        }
-        
-        //{comment.votes = comment.votes + req.body.value}
-        console.log(req.body.value)
-        
-        res.send(question)        
-    }  )
-})
+    Questions.findOne({
+            "_id": mongoose.Types.ObjectId("5cc179181a3cf6f64833ad01")
+        },
+        async (err, question) => {
+            if (err) {
+                console.log(err)
+                console.log("fejl")
+            }
 
+            //{comment.votes = comment.votes + req.body.value}
+            console.log(req.body.value)
+            question.votes = question.votes + 1
+            await question.save()
+            res.send(question)
+        })
+})
+// {$inc: {"votes": -1}}
 // Downvote Spørgsmål
 app.put("/downvoteQuestion", (req, res, next) => {
-    QuestionComment.findOneAndUpdate({"_id": mongoose.Types.ObjectId("5cbf023bc04f2f8fecb9ddc2")}, {$inc: {"votes": -1}},
-    (err, question) => {
-        if(err) {
-            console.log(err)
-            console.log("fejl")
-        }
-        //{comment.votes = comment.votes + req.body.value}
-        console.log(req.body.value)
-        
-        res.send(question)        
-    }  )
+    Questions.findOne({
+            "_id": mongoose.Types.ObjectId("5cc179181a3cf6f64833ad01")
+        },
+        async (err, question) => {
+            if (err) {
+                console.log(err)
+                console.log("fejl")
+            }
+            //{comment.votes = comment.votes + req.body.value}
+
+
+            question.votes = question.votes - 1
+            await question.save()
+            res.send(question)
+        })
 })
 
 // Embeded
-app.post("/newcomment", (req, res, next) => {
-    const nyComment = {"title": req.body.comments.title, "votes": req.body.comments.votes, "user": req.body.comments.user}
-    
-    QuestionComment.findOneAndUpdate({_id: "5cc06b5c6d05ce17c803ac6f"}, 
-    {$push: {}}, (err, comment) => {
+app.post("/newComment", (req, res, next) => {
+    const newComment = {
+        "title": req.body.comments.title,
+        "votes": req.body.comments.votes,
+        "user": req.body.comments.user
+    }
+
+    Questions.findOneAndUpdate({
+        _id: "5cc179f81a3cf6f64833ad03"
+    }, {
+        $push: {}
+    }, (err, comment) => {
         if (err) {
-        console.log(err) }
-        console.log(comment)
-        comment.comments.push(nyComment)
-        res.send(comment)
-    })       
-})
- // Get specifik comment ud fra dets id
-app.get("/upvoteComment", (req, res) => {
-    
-    QuestionComment.findOne({comments: {_id:  mongoose.Types.ObjectId("5cbf1052a014c9543c74607c")}},
-    (err, comment) => {
-        if(err) {
             console.log(err)
-            console.log("fejl")
-        }            
+        }
+        console.log(comment)
+        comment.comments.push(newComment)
         res.send(comment)
+    })
+})
+// Upvote comment by grabbing the id
+app.post("/upvoteComment", (req, res) => {
+
+    Questions.findOne({
+            "comments._id": "5cc179181a3cf6f64833ad02"
+        }, {
+            comments: {
+                $elemMatch: {
+                    _id: "5cc179181a3cf6f64833ad02"
+                }
+            }
+        },
+        (err, qComment) => {
+            if (err) {
+                console.log(err)
+                console.log("fejl")
+            }
+            console.log(qComment)
+            qComment.comments[0].votes = qComment.comments[0].votes + 1
+            qComment.save()
+
+            res.send(qComment)
+        })
+})
+
+// Downvote comment by grabbing the id
+app.post("/downvoteComment", (req, res) => {
+
+    Questions.findOne({
+            "comments._id": "5cbf023bc04f2f8fecb9ddc4"
+        }, {
+            comments: {
+                $elemMatch: {
+                    _id: "5cbf023bc04f2f8fecb9ddc4"
+                }
+            }
+        },
+        (err, qComment) => {
+            if (err) {
+                console.log(err)
+                console.log("fejl")
+            }
+            console.log(qComment)
+            qComment.comments[0].votes = qComment.comments[0].votes - 1
+            qComment.save()
+
+            res.send(qComment)
+        })
+})
+
+// Add tag to already existing tag
+app.post("/addTag", (req, res, next) => {
+    //const newTags = [...req.body.tags]
+    Questions.findOneAndUpdate({
+        _id: "5cc179181a3cf6f64833ad01"
+    }, {
+        $push: {}
+    }, (err, question) => {
+        if (err) {
+            console.log(err)
+        }
+        console.log(question)
+        question.tags = [...question.tags, ...req.body.tags]
+        question.save()
+        res.send(question)
     })
 })
 
@@ -175,17 +235,6 @@ app.get("/upvoteComment", (req, res) => {
 
 }) */
 
-//Embeded
-app.post("/newQuestionComment", (req, res, next) => {
-    var newQuestionComment = new QuestionComment(req.body)
-    newQuestionComment.save(function (err, newQuestionComment) {
-        if (err) {
-            return next(err)
-        }
-        res.json(201, newQuestionComment);
-        console.log("Ny QuestionComment er tilføjet" + newQuestionComment);
-    })
-})
 
 
 // post ny user
@@ -220,18 +269,5 @@ app.post('/newComment', (req, res, next) => {
         console.log("Ny kommentar er tilføjet: " + newComment);
     })
 })
-
-app.post('/newQuestion', (req, res, next) => {
-    var newQuestion = new Question(req.body)
-    newQuestion.votes = 0;
-    newQuestion.save(function (err, newQuestion) {
-        if (err) {
-            return next(err)
-        }
-        res.json(201, newQuestion);
-        console.log("Nyt spørgsmål er tilføjet: " + newQuestion);
-    })
-})
-
 
 app.listen(port, () => console.log(`Forum API running on port ${port}!`));
