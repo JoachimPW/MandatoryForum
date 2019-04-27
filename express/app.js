@@ -95,75 +95,76 @@ app.get('/questions', (req, res) => {
         res.send(questions)
     })
 })
-// {$inc: {"votes": 1}},
+
 // Upvote Spørgsmål
-app.put("/upvoteQuestion", (req, res, next) => {
+app.post("/upvoteQuestion/:id", async (req, res, next) => {
+    var { id } = req.params
     Questions.findOne({
-            "_id": mongoose.Types.ObjectId("5cc179181a3cf6f64833ad01")
-        },
-        async (err, question) => {
+        "_id": id
+    },
+    async(err, question) => {
             if (err) {
                 console.log(err)
                 console.log("fejl")
-            }
-
-            //{comment.votes = comment.votes + req.body.value}
-            console.log(req.body.value)
+            }                       
             question.votes = question.votes + 1
             await question.save()
             res.send(question)
         })
 })
-// {$inc: {"votes": -1}}
+
+// Har brugt to forskellige metoder til up/downvote for at teste/lære
+
 // Downvote Spørgsmål
-app.put("/downvoteQuestion", (req, res, next) => {
-    Questions.findOne({
-            "_id": mongoose.Types.ObjectId("5cc179181a3cf6f64833ad01")
-        },
-        async (err, question) => {
+app.post("/downvoteQuestion/:id",  (req, res, next) => {
+    var { id } = req.params
+    Questions.findOneAndUpdate({
+        "_id": id
+    }, {$inc: {votes: -1}},
+          async (err, question) => {
             if (err) {
                 console.log(err)
                 console.log("fejl")
             }
             //{comment.votes = comment.votes + req.body.value}
-
-
-            question.votes = question.votes - 1
+           /*  question.votes = question.votes - 1 */
             await question.save()
             res.send(question)
+            
         })
 })
 
 // Embeded
-app.post("/newComment", (req, res, next) => {
+app.post("/newComment/:id", (req, res, next) => {
+    const {id} = req.params
     const newComment = {
-        "title": req.body.comments.title,
-        "votes": req.body.comments.votes,
-        "user": req.body.comments.user
-    }
+        "title": req.body.comments.title        
+    }    
 
     Questions.findOneAndUpdate({
-        _id: "5cc179f81a3cf6f64833ad03"
+        _id: id
     }, {
-        $push: {}
-    }, (err, comment) => {
-        if (err) {
-            console.log(err)
-        }
-        console.log(comment)
-        comment.comments.push(newComment)
-        res.send(comment)
-    })
+            $push: {}
+        }, (err, comment) => {
+            if (err) {
+                console.log(err)
+            }
+            console.log(comment)
+            console.log("Ny kommentar er tilføjet");
+            comment.comments.push(newComment)
+            res.send(comment)
+            comment.save()
+        })
 })
 // Upvote comment by grabbing the id
-app.post("/upvoteComment", (req, res) => {
-
+app.post("/upvoteComment/:id", (req, res) => {
+    var {id} = req.params;
     Questions.findOne({
-            "comments._id": "5cc179181a3cf6f64833ad02"
-        }, {
+        "comments._id": id
+    }, {
             comments: {
                 $elemMatch: {
-                    _id: "5cc179181a3cf6f64833ad02"
+                    _id: id
                 }
             }
         },
@@ -181,14 +182,14 @@ app.post("/upvoteComment", (req, res) => {
 })
 
 // Downvote comment by grabbing the id
-app.post("/downvoteComment", (req, res) => {
-
+app.post("/downvoteComment/:id", (req, res) => {
+    var {id} = req.params;
     Questions.findOne({
-            "comments._id": "5cbf023bc04f2f8fecb9ddc4"
-        }, {
+        "comments._id": id
+    }, {
             comments: {
                 $elemMatch: {
-                    _id: "5cbf023bc04f2f8fecb9ddc4"
+                    _id: id
                 }
             }
         },
@@ -211,16 +212,16 @@ app.post("/addTag", (req, res, next) => {
     Questions.findOneAndUpdate({
         _id: "5cc179181a3cf6f64833ad01"
     }, {
-        $push: {}
-    }, (err, question) => {
-        if (err) {
-            console.log(err)
-        }
-        console.log(question)
-        question.tags = [...question.tags, ...req.body.tags]
-        question.save()
-        res.send(question)
-    })
+            $push: {}
+        }, (err, question) => {
+            if (err) {
+                console.log(err)
+            }
+            console.log(question)
+            question.tags = [...question.tags, ...req.body.tags]
+            question.save()
+            res.send(question)
+        })
 })
 
 
