@@ -138,7 +138,8 @@ app.post("/downvoteQuestion/:id",  (req, res, next) => {
 app.post("/newComment/:id", (req, res, next) => {
     const {id} = req.params
     const newComment = {
-        "title": req.body.comments.title        
+        "title": req.body.comments.title,
+        "votes": 0        
     }    
 
     Questions.findOneAndUpdate({

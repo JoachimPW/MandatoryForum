@@ -46,8 +46,8 @@ class App extends Component {
       });
   }
 
-  addComment(comment, id) {
-    fetch(`http://localhost:9090/newComment/${id}`, {
+  addComment(comment, questionId) {
+    fetch(`http://localhost:9090/newComment/${questionId}`, {
       method: 'POST',
       body: JSON.stringify({
         comments: {
