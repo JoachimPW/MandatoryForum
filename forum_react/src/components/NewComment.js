@@ -16,33 +16,31 @@ export default class NewComment extends Component {
         this.onChangeComment = this.onChangeComment.bind(this);
     }
 
-     componentDidMount() {
-        if(this.props.location.state) {
-        const { qid } = this.props.location.state
-        const{id} = this.props.match.params
-        this.setState({
-            questionId: qid           
-            
-        })
-    }   
-    } 
+    /*componentDidMount() {
+        if (this.props.location.state) {
+            const { qid } = this.props.location.state
+            const { id } = this.props.match.params
+            this.setState({
+                questionId: qid
+
+            })
+        }
+    }
     /*componentWillReceiveProps(){       
         this.setState({           
             qqqid: this.props.questionId._id
         })
             
         } */
-    
 
-    handleCommentInput(event) {
+    handleCommentInput(id) {
         if (this.state.comment.length === 0) {
-            event.preventDefault()
             this.setState({
                 errMessage: "Please fill out the field before posting"
             })
         }
         else {
-            this.props.addComment(this.state.comment, this.state.questionId);
+            this.props.addComment(this.state.comment, id);
         }
     }
 
@@ -56,9 +54,10 @@ export default class NewComment extends Component {
         const searchParams = new URLSearchParams(location.search);
         return {
             query: searchParams.get('query') || '',
-        };    }
+        };
+    }
 
-    render() {       
+    render() {
         let qquestion = this.props.questionId
         return (
             <React.Fragment>
@@ -69,15 +68,14 @@ export default class NewComment extends Component {
                         <div className="card">
                             <div className="card-body">
                                 <form>
-                                    
                                     <div className="form-group">
                                         <label> Post an Answer</label>                                        
                                         <textarea type="text" onChange={this.onChangeComment} className="form-control" id="title" placeholder="Answer..."></textarea>
                                     </div>
                                     <h1>{this.state.errMessage}</h1>
-                                    <button onClick={() => this.handleCommentInput(this.state.questionId)} value={this.state.questionId}
+                                    <button onClick={() => this.handleCommentInput(qquestion._id)} value={qquestion._id}
                                         type="submit" id="submitButton" className="btn btn-primary"> Post Answer
-                  </button>
+                                    </button>
                                 </form>
                             </div>
                         </div>

@@ -7,16 +7,24 @@ export default class NewQuestion extends Component {
 
     this.state = {
       question: "",
+      text: "",
       errMessage: ""
     }
 
     this.handleQuestionInput = this.handleQuestionInput.bind(this);
-    this.onChangeQuesiton = this.onChangeQuesiton.bind(this);
+    this.onChangeQuestion = this.onChangeQuestion.bind(this);
+    this.onChangeText = this.onChangeText.bind(this);
   }
 
-  onChangeQuesiton(event) {
+  onChangeQuestion(event) {
     this.setState({
       question: event.target.value
+    })
+  }
+
+  onChangeText(event) {
+    this.setState({
+      text: event.target.value
     })
   }
 
@@ -28,7 +36,7 @@ export default class NewQuestion extends Component {
       })
     }
     else {
-      this.props.addQuestion(this.state.question, this.state.questionId);
+      this.props.addQuestion(this.state.question, this.state.text);
     }
   }
 
@@ -44,7 +52,8 @@ export default class NewQuestion extends Component {
                 <form>
                   <div className="form-group">
                     <label> Ask a question</label>
-                    <textarea type="text" onChange={this.onChangeQuesiton} className="form-control" id="title" placeholder="Question..."></textarea>
+                    <input type="text" onChange={this.onChangeQuestion} className="form-control" id="title" placeholder="Question..."></input>
+                    <textarea type="text" onChange={this.onChangeText} className="form-control" placeholder="Explain your question"></textarea>
                   </div>
                   <button onClick={this.handleQuestionInput}
                     type="submit" id="submitButton" className="btn btn-primary"> Post question

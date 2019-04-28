@@ -1,12 +1,60 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+}
+
 .voteDiv {
-  -webkit-box-align:center;
-  display:flex;
-  align-items:center;
-  fill:inherit;
+  -webkit-box-align: center;
+  display: flex;
+  align-items: center;
+  fill: inherit;
   flex-direction: column;
-  width:50px;
+  grid-column: 1;
+  padding-right: 15px;
+}
+
+.textBlock {
+  grid-column:2;
+  padding-left:50px;
+  padding-right:50px;
 }
 
 p {
-  font-size:18px;
+  font-size: 18px;
+}
+
+.card {
+  -webkit-box-shadow: 6px 6px 22px -10px rgba(0, 0, 0, 0.54);
+  -moz-box-shadow: 6px 6px 22px -10px rgba(0, 0, 0, 0.54);
+  box-shadow: 6px 6px 22px -10px rgba(0, 0, 0, 0.54);
+}
+
+.wrapper {
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.form-singin{
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);  
+}
+
+.form-signin-heading {
+  margin-bottom:30px;
+}
+
+.loginInput {
+  position: relative;
+  font-size: 16px !important;
+  height:  auto !important;
+  padding: 10px !important;
+  margin-bottom:30px;
+  
+  
 }

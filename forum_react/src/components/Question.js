@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import NewComment from './NewComment';
 import { IoIosArrowUp } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -42,10 +43,30 @@ export default class Question extends Component {
             })
     }
 
+    addComment(comment, questionId) {
+        fetch(`http://localhost:9090/newComment/${questionId}`, {
+          method: 'POST',
+          body: JSON.stringify({
+            comments: {
+            title: comment,
+            user: localStorage.getItem("user")
+          }
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        })
+          .then(response => response.json())
+          .then(json => {
+            console.log("Result of posting a new recipe:");
+            console.log(json);
+          });
+      }
+
     render() {
 
         let question = this.props.question;
-       
+
         let list = []
 
         if (this.props.question) {
@@ -55,18 +76,23 @@ export default class Question extends Component {
                         <div className="col-md-8 col-centered" style={{ textAlign: "center" }}>
                             <div className="card">
                                 <div className="card-body">
-                                    <p style={{ textAlign: "center" }}>{elm.title}</p>
-                                    <div className="voteDiv" style={{ textAlign: "left" }}>
-                                        <form>
-                                            <button type="submit" onClick={() => this.upvoteComment(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowUp /> </button>
-                                        </form>
-                                        <h4>{elm.votes}</h4>
-                                        <form>
-                                            <button type="submit" onClick={() => this.downvoteComment(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowDown /> </button>
-                                        </form>
+                                    <div className="gridContainer">
+                                        <div className="voteDiv" style={{ textAlign: "left" }}>
+                                            <form>
+                                                <button type="submit" onClick={() => this.upvoteComment(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowUp /> </button>
+                                            </form>
+                                            <h4>{elm.votes}</h4>
+                                            <form>
+                                                <button type="submit" onClick={() => this.downvoteComment(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowDown /> </button>
+                                            </form>
+                                        </div>
+                                        <div className="textBlock">
+                                            <p style={{ textAlign: "center" }}>{elm.title}</p>                                            
+                                        </div>
+
                                     </div>
-                                    <h4> tags: {elm.tags} </h4>
-                                    <p>Asked by: {elm.user}</p>
+                                    <p style={{ textAlign: "center" }}>Answered by: {elm.user}</p>
+
                                 </div> </div> </div></div>
                     <br></br>
                 </React.Fragment>
@@ -79,14 +105,25 @@ export default class Question extends Component {
             )
         }
         return (
-            <div>
-                <h1>{question.title}</h1>
-                <p>Posted by: {question.user}</p>
-                <br></br>
-                <h2 style={{ textAlign: "center" }}>Answers</h2>
-                <br></br>
-                {list}
-            </div >
+            <React.Fragment>
+                <div className="row justify-content-md-center">
+                    <div className="col-md-10 col-centered" style={{ textAlign: "center" }}>
+                        <div className="card" style={{ padding: "25px" }}>
+                            <div className="card-body">
+                                <h3>{question.title}</h3>                                
+                                <hr></hr>
+                                <p style={{ paddingLeft: "75px", paddingRight: "75px" }}>{question.text}</p>
+                            </div></div></div></div>
+                <div>
+                    <br></br>
+                    <h2 style={{ textAlign: "center" }}>Answers</h2>
+                    {list}
+                </div >
+
+                <NewComment 
+                      questionId={question} addComment={this.addComment}></NewComment>
+            </React.Fragment>
         )
+
     }
 }

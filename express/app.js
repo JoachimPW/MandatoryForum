@@ -55,6 +55,7 @@ var Comment = new Schema({
 
 var Question = new Schema({
     title: String,
+    text: String,
     votes: Number,
     comments: [Comment],
     user: String,
@@ -139,6 +140,7 @@ app.post("/newComment/:id", (req, res, next) => {
     const {id} = req.params
     const newComment = {
         "title": req.body.comments.title,
+        "user": req.body.comments.user,
         "votes": 0        
     }    
 
@@ -251,7 +253,7 @@ app.post('/newUser', (req, res, next) => {
     })
 })
 
-app.post('/newComment', (req, res, next) => {
+/* app.post('/newComment', (req, res, next) => {
     var newComment = new Comment(req.body)
     newComment.commentVotes = 0;
     newComment.user = "5cab205ff9fdc7aa4cbdecb8"
@@ -271,5 +273,5 @@ app.post('/newComment', (req, res, next) => {
         console.log("Ny kommentar er tilføjet: " + newComment);
     })
 })
-
+*/
 app.listen(port, () => console.log(`Forum API running on port ${port}!`));
