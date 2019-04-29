@@ -276,4 +276,9 @@ app.post('/newUser', (req, res, next) => {
     })
 })
 */
+
+/**** Reroute all unknown requests to the React index.html ****/
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'));
+});
 app.listen(port, () => console.log(`Forum API running on port ${port}!`));
