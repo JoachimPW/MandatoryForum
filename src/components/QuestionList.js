@@ -29,7 +29,7 @@ export default class QuestionList extends Component {
     this.setState({
       stateQuestionId: id
     });
-    fetch(`http://localhost:9090/upvoteQuestion/${id}`, {
+    fetch(`https://wiberg-forum.herokuapp.com/upvoteQuestion/${id}`, {
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8"
@@ -47,7 +47,7 @@ export default class QuestionList extends Component {
     this.setState({
       stateQuestionId: id
     });
-    fetch(`http://localhost:9090/downvoteQuestion/${id}`, {
+    fetch(`https://wiberg-forum.herokuapp.com/downvoteQuestion/${id}`, {
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8"

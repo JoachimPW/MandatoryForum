@@ -14,7 +14,7 @@ export default class Question extends Component {
     }
 
     upvoteComment(id) {
-        fetch(`http://localhost:9090/upvoteComment/${id}`, {
+        fetch(`https://wiberg-forum.herokuapp.com/upvoteComment/${id}`, {
             method: 'POST',
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -29,7 +29,7 @@ export default class Question extends Component {
     }
 
     downvoteComment(id) {
-        fetch(`http://localhost:9090/downvoteComment/${id}`, {
+        fetch(`https://wiberg-forum.herokuapp.com/downvoteComment/${id}`, {
             method: 'POST',
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -44,7 +44,7 @@ export default class Question extends Component {
     }
 
     addComment(comment, questionId) {
-        fetch(`http://localhost:9090/newComment/${questionId}`, {
+        fetch(`https://wiberg-forum.herokuapp.com/newComment/${questionId}`, {
           method: 'POST',
           body: JSON.stringify({
             comments: {
