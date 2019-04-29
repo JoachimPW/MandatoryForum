@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config()
 const app = express();
@@ -6,6 +7,7 @@ app.use(bodyParser.json());
 var mongoose = require('mongoose')
 const checkJwt = require('express-jwt'); // Check for access tokens automatically
 const morgan = require('morgan'); // Log all HTTP requests to the console
+app.use(express.static(path.join(__dirname, '../build')));
 
 
 /****** Configuration *****/
