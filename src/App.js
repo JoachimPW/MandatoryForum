@@ -35,7 +35,7 @@ class App extends Component {
     }
 
 
-    fetch('http://localhost:9090/questions')
+    fetch('https://wiberg-forum.herokuapp.com/questions')
       .then(response => response.json())
       .then(data => this.setState({ questions: data }))
   }
