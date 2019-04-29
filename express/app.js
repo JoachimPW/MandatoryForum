@@ -6,7 +6,7 @@ app.use(bodyParser.json());
 var mongoose = require('mongoose')
 const checkJwt = require('express-jwt'); // Check for access tokens automatically
 const morgan = require('morgan'); // Log all HTTP requests to the console
-const bcrypt = require('bcrypt'); // Used for hashing passwords!
+
 
 /****** Configuration *****/
 const port = (process.env.PORT || 9090);
