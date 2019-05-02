@@ -25,8 +25,8 @@ export default class QuestionList extends Component {
 
   }
 
-  upvoteQuestion(id, event) {
-    event.preventDefault()
+  upvoteQuestion(id) {
+    id.preventDefault()
     this.setState({
       stateQuestionId: id
     });
