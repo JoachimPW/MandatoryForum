@@ -42,6 +42,7 @@ export default class QuestionList extends Component {
         console.log(json);
 
       })
+      preventDefault()
   }
 
   downvoteQuestion(id) {
@@ -81,11 +82,11 @@ export default class QuestionList extends Component {
                   <div className="gridContainer">
                     <div className="voteDiv" style={{ textAlign: "left" }}>
                       <form>
-                        <button type="submit" onClick={() => this.upvoteQuestion(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowUp /> </button>
+                        <button onClick={() => this.upvoteQuestion(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowUp /> </button>
                       </form>
                       <h4>{elm.votes}</h4>
                       <form>
-                        <button type="submit" onClick={() => this.downvoteQuestion(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowDown /> </button>
+                        <button onClick={() => this.downvoteQuestion(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowDown /> </button>
                       </form>
                     </div>
                     <div className="textBlock">
