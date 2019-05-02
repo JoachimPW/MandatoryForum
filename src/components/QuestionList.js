@@ -26,8 +26,7 @@ export default class QuestionList extends Component {
   }
 
   upvoteQuestion(id) {
-    id.preventDefault()
-    this.setState({
+      this.setState({
       stateQuestionId: id
     });
     fetch(`https://wiberg-forum.herokuapp.com/upvoteQuestion/${id}`, {
@@ -42,7 +41,7 @@ export default class QuestionList extends Component {
         console.log(json);
 
       })
-      preventDefault()
+      
   }
 
   downvoteQuestion(id) {
