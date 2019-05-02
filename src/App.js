@@ -45,6 +45,7 @@ class App extends Component {
   }
 
   addQuestion(question, text) {
+   
     fetch('https://wiberg-forum.herokuapp.com/newQuestion', {
       method: 'POST',
       body: JSON.stringify({
