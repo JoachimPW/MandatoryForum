@@ -33,13 +33,15 @@ export default class NewComment extends Component {
             
         } */
 
-    handleCommentInput(id) {
+    handleCommentInput(event, id) {
         if (this.state.comment.length === 0) {
+            event.preventDefault()
             this.setState({
                 errMessage: "Please fill out the field before posting"
             })
         }
         else {
+            event.preventDefault()
             this.props.addComment(this.state.comment, id);
         }
     }
@@ -73,7 +75,7 @@ export default class NewComment extends Component {
                                         <textarea type="text" onChange={this.onChangeComment} className="form-control" id="title" placeholder="Answer..."></textarea>
                                     </div>
                                     <h1>{this.state.errMessage}</h1>
-                                    <button onClick={() => this.handleCommentInput(qquestion._id)} value={qquestion._id}
+                                    <button onClick={ e => this.handleCommentInput(e, qquestion._id)} value={qquestion._id}
                                         type="submit" id="submitButton" className="btn btn-primary"> Post Answer
                                     </button>
                                 </form>

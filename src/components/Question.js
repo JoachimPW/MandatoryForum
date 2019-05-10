@@ -13,55 +13,16 @@ export default class Question extends Component {
         this.downvoteComment = this.downvoteComment.bind(this);
     }
 
-    upvoteComment(id) {
-        fetch(`https://wiberg-forum.herokuapp.com/upvoteComment/${id}`, {
-            method: 'POST',
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            }
-        })
-            .then(response => response.json())
-            .then(json => {
-                console.log("Upvoted");
-                console.log(json);
-
-            })
+    handleUpvoteComment(e, id) {
+        e.preventDefault()
+        this.props.upvoteComment(id)
     }
 
-    downvoteComment(id) {
-        fetch(`https://wiberg-forum.herokuapp.com/downvoteComment/${id}`, {
-            method: 'POST',
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            }
-        })
-            .then(response => response.json())
-            .then(json => {
-                console.log("Downvoted");
-                console.log(json);
-
-            })
+    handleDownvoteComment(e, id) {
+        e.preventDefault()
+        this.props.downvoteComment(id)
     }
 
-    addComment(comment, questionId) {
-        fetch(`https://wiberg-forum.herokuapp.com/newComment/${questionId}`, {
-          method: 'POST',
-          body: JSON.stringify({
-            comments: {
-            title: comment,
-            user: localStorage.getItem("user")
-          }
-          }),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8"
-          }
-        })
-          .then(response => response.json())
-          .then(json => {
-            console.log("Result of posting a new recipe:");
-            console.log(json);
-          });
-      }
 
     render() {
 
@@ -79,11 +40,11 @@ export default class Question extends Component {
                                     <div className="gridContainer">
                                         <div className="voteDiv" style={{ textAlign: "left" }}>
                                             <form>
-                                                <button type="submit" onClick={() => this.upvoteComment(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowUp /> </button>
+                                                <button onClick={ e => this.handleUpvoteComment(e, elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowUp /> </button>
                                             </form>
                                             <h4>{elm.votes}</h4>
                                             <form>
-                                                <button type="submit" onClick={() => this.downvoteComment(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowDown /> </button>
+                                                <button onClick={ e => this.handleDownvoteComment(e, elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowDown /> </button>
                                             </form>
                                         </div>
                                         <div className="textBlock">

@@ -16,50 +16,21 @@ export default class QuestionList extends Component {
       questionId: "",
       user: "",
       loggedIn: true
-
-
     };
 
-    this.upvoteQuestion = this.upvoteQuestion.bind(this);
-    this.downvoteQuestion = this.downvoteQuestion.bind(this);
+    this.handleUpvote = this.handleUpvote.bind(this);
+    this.handleDownvote = this.handleDownvote.bind(this);
 
   }
 
-  upvoteQuestion(id) {
-      this.setState({
-      stateQuestionId: id
-    });
-    fetch(`https://wiberg-forum.herokuapp.com/upvoteQuestion/${id}`, {
-      method: 'POST',
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      }
-    })
-      .then(response => response.json())
-      .then(json => {
-        console.log("Upvoted");
-        console.log(json);
-
-      })
-      
+  handleUpvote(e, id) {
+    e.preventDefault()
+    this.props.upvoteQuestion(id)
   }
 
-  downvoteQuestion(id) {
-    this.setState({
-      stateQuestionId: id
-    });
-    fetch(`https://wiberg-forum.herokuapp.com/downvoteQuestion/${id}`, {
-      method: 'POST',
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      }
-    })
-      .then(response => response.json())
-      .then(json => {
-        console.log("Downvoted");
-        console.log(json);
-
-      })
+  handleDownvote(e, id) {
+    e.preventDefault()
+    this.props.downvoteQuestion(id)
   }
 
   render() {
@@ -81,11 +52,11 @@ export default class QuestionList extends Component {
                   <div className="gridContainer">
                     <div className="voteDiv" style={{ textAlign: "left" }}>
                       <form>
-                        <button onClick={() => this.upvoteQuestion(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowUp /> </button>
+                        <button onClick={ e => this.handleUpvote(e, elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowUp /> </button>
                       </form>
                       <h4>{elm.votes}</h4>
                       <form>
-                        <button onClick={() => this.downvoteQuestion(elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowDown /> </button>
+                        <button onClick={ e => this.handleDownvote(e, elm._id)} value={elm._id} className="btn btn-info"><IoIosArrowDown /> </button>
                       </form>
                     </div>
                     <div className="textBlock">
