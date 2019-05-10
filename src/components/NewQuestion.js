@@ -36,6 +36,7 @@ export default class NewQuestion extends Component {
       })
     }
     else {
+      event.preventDefault()
       this.props.addQuestion(this.state.question, this.state.text);
     }
   }

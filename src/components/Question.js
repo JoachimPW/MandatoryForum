@@ -8,9 +8,6 @@ export default class Question extends Component {
         super(props);
         this.state = {
         }
-
-        this.upvoteComment = this.upvoteComment.bind(this);
-        this.downvoteComment = this.downvoteComment.bind(this);
     }
 
     handleUpvoteComment(e, id) {
