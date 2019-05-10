@@ -76,10 +76,7 @@ export default class Question extends Component {
                     <br></br>
                     <h2 style={{ textAlign: "center" }}>Answers</h2>
                     {list}
-                </div >
-
-                <NewComment 
-                      questionId={question} addComment={this.addComment}></NewComment>
+                </div >                
             </React.Fragment>
         )
 
