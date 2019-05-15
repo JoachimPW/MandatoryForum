@@ -178,7 +178,9 @@ class App extends Component {
   }
 
   render() {
-      if (localStorage.getItem("user").length == 0) {
+      if (!localStorage.getItem("user") {          
+         localStorage.setItem("user", "")      
+       }          
         return (
           <div className="wrapper">
             <form className="form-singin">
