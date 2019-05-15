@@ -177,21 +177,21 @@ class App extends Component {
       })
   }
 
-  render() {
-      if (!localStorage.getItem("user")) {          
-         localStorage.setItem("user", "")      
-       }          
-        return (
-          <div className="wrapper">
-            <form className="form-singin">
-              <h2 className="form-signin-heading">Login</h2>
-              <input type="text" onChange={this.onChangeUser} className="form-control loginInput" placeholder="Username"></input>
-              <p style={{ color: "red" }}>{this.state.authErr}</p>
-              <button onClick={this.handleLogin} className="btn btn-lg btn-primary btn-block">Login</button>
-            </form>
-          </div>
-        )
-      }
+  render() {if (!localStorage.getItem("user")) {
+      localStorage.setItem("user", "")
+    }
+
+    if (localStorage.getItem("user").length == 0) {
+      return (
+        <div className="wrapper">
+          <form className="form-singin">
+            <h2 className="form-signin-heading">Login</h2>
+            <input type="text" onChange={this.onChangeUser} className="form-control loginInput" placeholder="Username"></input>
+            <p style={{ color: "red" }}>{this.state.authErr}</p>
+            <button onClick={this.handleLogin} className="btn btn-lg btn-primary btn-block">Login</button>
+          </form>
+        </div>)
+    }
 
     return (
       <React.Fragment>
