@@ -178,7 +178,7 @@ class App extends Component {
   }
 
   render() {
-      if (!localStorage.getItem("user") {          
+      if (!localStorage.getItem("user")) {          
          localStorage.setItem("user", "")      
        }          
         return (
